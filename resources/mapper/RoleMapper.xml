@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smbms.dao.role.RoleMapper">
+
+	<!-- 查询用户表记录数 -->
+	<select id="count" resultType="int">
+		SELECT COUNT(1) AS COUNT from smbms_user
+	</select>
+	<insert id="addRole"  >
+		insert INTO smbms_role
+		<trim suffixOverrides="," prefix="(" suffix=")values" >
+			<if test="roleCode!=null and roleCode.length()!=null">
+				roleCode,
+			</if>
+			<if test="roleName!=null and roleName.length()!=null">
+				roleName,
+			</if>
+			<if test="createdBy!=null">
+				createdBy,
+			</if>
+			<if test="creationDate!=null">
+				creationDate,
+			</if>
+		</trim>
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="roleCode!=null and roleCode.length()!=null">
+				#{roleCode},
+			</if>
+			<if test="roleName!=null and roleName.length()!=null">
+				#{roleName},
+			</if>
+			<if test="createdBy!=null">
+				#{createdBy},
+			</if>
+			<if test="creationDate!=null">
+				#{creationDate},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateRole" parameterType="Role">
+		UPDATE smbms_role
+		<trim prefix="set" suffixOverrides="," suffix="where">
+			<if test="roleCode!=null and roleCode.length()!=0">
+				roleCode=#{roleCode},
+			</if>
+			<if test="roleName!=null and roleName.length()!=null">
+				roleName=#{roleName},
+			</if>
+			<if test="modifyBy!=null">
+				modifyBy=#{modifyBy},
+			</if>
+			<if test="modifyDate==null">
+				modifyDate=NOW(),
+			</if>
+		</trim>
+		id=#{id}
+	</update>
+
+	<delete id="deleteRole" parameterType="int">
+		delete FROM smbms_role WHERE id=#{id}
+	</delete>
+
+	<select id="findRole" resultType="Role">
+		select * from smbms_role
+		<where>
+			<if test="roleCode!=null">
+				AND  roleCode LIKE CONCAT('%',#{roleCode},'%')
+			</if>
+			<if test="roleName!=null">
+				AND  roleName LIKE CONCAT('%',#{roleName},'%')
+			</if>
+			<if test="createdBy!=null">
+				AND   createdBy=#{createdBy}
+			</if>
+		</where>
+	</select>
+	
+</mapper>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smbms.dao.user.UserMapper">
+	<resultMap id="userList" type="User">
+		<id property="id" column="id"/>
+		<result property="userCode" column="userCode"/>
+		<result property="userName" column="userName"/>
+		<result property="userPassword" column="userPassword"/>
+		<result property="gender" column="gender"/>
+		<result property="birthday" column="birthday"/>
+		<result property="phone" column="phone"/>
+		<result property="address" column="address"/>
+		<result property="userRole" column="userRole"/>
+		<result property="createdBy" column="createdBy"/>
+		<result property="creationDate" column="creationDate"/>
+		<result property="modifyBy" column="modifyBy"/>
+		<result property="modifyDate" column="modifyDate"/>
+		<result property="userRoleName" column="userRoleName"/>
+
+	</resultMap>
+	<select id="count" resultType="int">
+		SELECT COUNT(1) AS COUNT FROM smbms_user
+	</select>
+	
+
+	<select id="getUserList" resultMap="userList">
+		SELECT  u.*,r.roleName as userRoleName FROM smbms_user u
+		LEFT JOIN	smbms_role r ON u.userRole=r.id
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="userName !=null and userName.length() !=0">
+				userName LIKE CONCAT('%',#{userName},'%')
+			</if>
+			<if test="userRole !=null">
+				userRole = #{userRole}
+			</if>
+		</trim>
+		LIMIT #{index},#{size}
+	</select>
+
+	<select id="selectById" resultMap="userList">
+		SELECT  u.*,r.roleName as userRoleName FROM smbms_user u
+		LEFT JOIN	smbms_role r ON u.userRole=r.id
+		WHERE u.id=#{id}
+	</select>
+
+	<select id="getUserByCode" resultMap="userList">
+		SELECT * FROM smbms_user WHERE userCode=#{userCode}
+	</select>
+
+
+	<delete id="delete">
+		  DELETE  FROM smbms_user
+		  WHERE id=#{id}
+	</delete>
+	
+	<update id="update" parameterType="User">
+		UPDATE smbms_user
+		<set>
+			<if test="userCode !=null and userCode.length() !=0">
+				userCode=#{userCode},
+			</if>
+			<if test="userName !=null and userName.length() !=0">
+				userName=#{userName},
+			</if>
+			<if test="gender !=null">
+				gender=#{gender},
+			</if>
+			<if test="birthday !=null">
+				birthday=#{birthday},
+			</if>
+			<if test="phone !=null and phone.length() !=0">
+				phone=#{phone},
+			</if>
+			<if test="address !=null and address.length() !=0">
+				address=#{address},
+			</if>
+			<if test="userRole !=null">
+				userRole=#{userRole},
+			</if>
+			<if test="modifyBy !=null">
+				modifyBy=#{modifyBy},
+			</if>
+			<if test="modifyDate !=null">
+				modifyBy=#{modifyDate},
+			</if>
+		</set>  
+		WHERE id=#{id}
+	</update>
+
+	<insert id="insert" parameterType="User">
+		INSERT INTO smbms_user (
+		<trim suffixOverrides=",">
+			<if test="userCode !=null and userCode.length() !=0">
+				userCode,
+			</if>
+			<if test="userName !=null and userName.length() !=0">
+				userName,
+			</if>
+			<if test="userPassword !=null and userPassword.length() !=0">
+				userPassword,
+			</if>
+			<if test="gender !=null">
+				gender,
+			</if>
+			<if test="birthday !=null">
+				birthday,
+			</if>
+			<if test="phone !=null and phone.length() !=0">
+				phone,
+			</if>
+			<if test="address !=null and address.length() !=0">
+				address,
+			</if>
+			<if test="userRole !=null">
+				userRole,
+			</if>
+			<if test="createdBy !=null">
+				createdBy,
+			</if>
+			<if test="creationDate !=null">
+				creationDate,
+			</if>
+			<if test="modifyBy !=null">
+				modifyBy,
+			</if>
+			<if test="modifyDate !=null">
+				modifyDate,
+			</if>
+		</trim>
+		)
+		VALUES
+		(
+		<trim suffixOverrides=",">
+			<if test="userCode !=null and userCode.length() !=0">
+				#{userCode},
+			</if>
+			<if test="userName !=null and userName.length() !=0">
+				#{userName},
+			</if>
+			<if test="userPassword !=null and userPassword.length() !=0">
+				#{userPassword},
+			</if>
+			<if test="gender !=null">
+				#{gender},
+			</if>
+			<if test="birthday !=null">
+				#{birthday},
+			</if>
+			<if test="phone !=null and phone.length() !=0">
+				#{phone},
+			</if>
+			<if test="address !=null and address.length() !=0">
+				#{address},
+			</if>
+			<if test="userRole !=null">
+				#{userRole},
+			</if>
+			<if test="createdBy !=null">
+				#{createdBy},
+			</if>
+			<if test="creationDate !=null">
+				#{creationDate},
+			</if>
+			<if test="modifyBy !=null">
+				#{modifyBy},
+			</if>
+			<if test="modifyDate !=null">
+				#{modifyDate},
+			</if>
+		</trim>
+		)
+	</insert>
+	<select id="getUserByName" resultType="int">
+		select EXISTS (SELECT * FROM smbms_user WHERE userCode=#{userCode} )
+	</select>
+	<select id="getUser" resultType="User">
+		select * from smbms_user where id=#{id} and userName=#{userName}
+	</select>
+</mapper>

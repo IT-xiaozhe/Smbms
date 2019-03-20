@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+">
+
+    <context:property-placeholder location="classpath:database.properties"/>
+    <!--<context:component-scan base-package="cn.smbms.service.*,cn.smbms.dao.*"/>-->
+    <!--jdbc pool-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 基本属性 url、user、password -->
+    <property name="url" value="${jdbc.url}"/>
+    <property name="username" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
+    <property name="driverClassName" value="${jdbc.driver}"/>
+    <!-- 配置初始化大小、最小、最大 -->
+    <property name="initialSize" value="1"/>
+    <property name="minIdle" value="1"/>
+    <property name="maxActive" value="20"/>
+    <property name="maxWait" value="60000"/>
+    <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+    <property name="minEvictableIdleTimeMillis" value="300000"/>
+    <property name="validationQuery" value="SELECT 'x'"/>
+    <property name="testWhileIdle" value="true"/>
+    <property name="testOnBorrow" value="false"/>
+    <property name="testOnReturn" value="false"/>
+    <property name="poolPreparedStatements" value="false"/>
+    <property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>
+    <property name="filters" value="stat"/>
+</bean>
+    <!--配置切面bean-->
+    <!--<bean id="theLogger" class="cn.smbms.aop.LoggingAspect"/>-->
+    <!--<aop:aspectj-autoproxy proxy-target-class="true"/>-->
+    <!--<aop:config>-->
+        <!--&lt;!&ndash;切入点的规则&ndash;&gt;-->
+        <!--<aop:pointcut id="pointLogger" expression="execution(* cn.smbms.service..*(..))"/>-->
+        <!---->
+        <!--&lt;!&ndash;<aop:aspect ref="theLogger">-->
+            <!--&lt;!&ndash;前置增强&ndash;&gt;-->
+            <!--<aop:before method="beforeMethod" pointcut-ref="pointLogger"/>-->
+            <!--&lt;!&ndash;后置增强&ndash;&gt;-->
+            <!--<aop:after-returning method="afterReturning" returning="result" pointcut-ref="pointLogger"/>-->
+            <!--&lt;!&ndash;最终&ndash;&gt;-->
+            <!--<aop:after method="after" pointcut-ref="pointLogger"/>-->
+            <!--&lt;!&ndash;异常&ndash;&gt;-->
+            <!--<aop:after-throwing method="afterThrowing" throwing="re" pointcut-ref="pointLogger"/>-->
+            <!--&lt;!&ndash;环绕&ndash;&gt;-->
+            <!--&lt;!&ndash;<aop:around method="aroundLogger" pointcut-ref="pointLogger"/>&ndash;&gt;-->
+        <!--</aop:aspect>&ndash;&gt;-->
+
+    <!--</aop:config>-->
+</beans>

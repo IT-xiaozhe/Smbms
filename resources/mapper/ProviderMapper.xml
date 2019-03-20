@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smbms.dao.provider.ProviderMapper">
+
+	<!-- 查询用户表记录数 -->
+	<select id="count" resultType="int">
+		SELECT COUNT(1) AS COUNT from smbms_user
+	</select>
+	<insert parameterType="Provider" id="addProvider">
+		insert into smbms_provider
+		<trim prefix="(" suffix=")VALUES" suffixOverrides=",">
+			<if test="proCode!=null">
+				proCode,
+			</if>
+			<if test="proName!=null">
+				proName,
+			</if>
+			<if test="proDesc!=null">
+				proDesc,
+			</if>
+			<if test="proContact!=null">
+				proContact,
+			</if>
+			<if test="proPhone!=null">
+				proPhone,
+			</if>
+			<if test="proAddress!=null">
+				proAddress,
+			</if>
+			<if test="proFax!=null">
+				proFax,
+			</if>
+			<if test="createdBy!=null">
+				createdBy,
+			</if>
+			<if test="creationDate!=null">
+				creationDate,
+			</if>
+		</trim>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="proCode!=null">
+				#{proCode},
+			</if>
+			<if test="proName!=null">
+				#{proName},
+			</if>
+			<if test="proDesc!=null">
+				#{proDesc},
+			</if>
+			<if test="proContact!=null">
+				#{proContact},
+			</if>
+			<if test="proPhone!=null">
+				#{proPhone},
+			</if>
+			<if test="proAddress!=null">
+				#{proAddress},
+			</if>
+			<if test="proFax!=null">
+				#{proFax},
+			</if>
+			<if test="createdBy!=null">
+				#{createdBy},
+			</if>
+			<if test="creationDate!=null">
+				#{creationDate},
+			</if>
+		</trim>
+	</insert>
+
+	<update parameterType="Provider" id="updateProvider">
+		UPDATE smbms_provider
+		<trim suffix="WHERE id=#{id}" suffixOverrides="," prefix="set">
+			<if test="proCode !=null"> proCode=#{proCode}, </if>
+			<if test="proName !=null"> proName=#{proName}, </if>
+			<if test="proDesc !=null"> proDesc=#{proDesc}, </if>
+			<if test="proContact !=null"> proContact=#{proContact}, </if>
+			<if test="proPhone !=null"> proPhone=#{proPhone}, </if>
+			<if test="proAddress !=null"> proAddress=#{proAddress}, </if>
+			<if test="proFax !=null"> proFax=#{proFax}, </if>
+			<if test="modifyDate !=null"> modifyDate=#{modifyDate}, </if>
+			<if test="modifyBy !=null"> modifyBy=#{modifyBy} </if>
+		</trim>
+	</update>
+
+	<delete parameterType="Provider" id="deleteProvider">
+		DELETE from smbms_provider WHERE id=#{id}
+	</delete>
+
+
+	<select id="findProvider" resultType="Provider">
+		select * from smbms_provider
+		<where>
+			<if test="code!=null">
+				and proCode like CONCAT('%',#{code},'%')
+			</if>
+			<if test="name!=null">
+				and proName LIKE CONCAT('%',#{name},'%')
+			</if>
+			<if test="contact!=null">
+				and proContact LIKE CONCAT('%',#{contact},'%')
+			</if>
+			<if test="proPhone!=null">
+				and proPhone LIKE CONCAT('%',#{proPhone},'%')
+			</if>
+		</where>
+	</select>
+	<select id="getProvider" resultType="Provider">
+		select * from smbms_provider WHERE id=#{id} AND proName=#{proName}
+	</select>
+
+</mapper>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smbms.dao.bill.BillMapper">
+    <resultMap id="billMap" type="Bill">
+        <id property="id" column="id"/>
+        <result property="billCode" column="billCode"/>
+        <result property="productName" column="productName"/>
+        <result property="productDesc" column="productDesc"/>
+        <result property="productUnit" column="productUnit"/>
+        <result property="productCount" column="productCount"/>
+        <result property="totalPrice" column="totalPrice"/>
+        <result property="isPayment" column="isPayment"/>
+        <result property="providerId" column="providerId"/>
+        <result property="createdBy" column="createdBy"/>
+        <result property="creationDate" column="creationDate"/>
+        <result property="modifyBy" column="modifyBy"/>
+        <result property="modifyDate" column="modifyDate"/>
+        <result property="providerName" column="providerName"/>
+    </resultMap>
+    <!-- 查询订单表记录数 -->
+    <select id="count" resultType="int">
+        SELECT COUNT(1) AS COUNT from smbms_bill
+    </select>
+    <!--订单列表-->
+    <select id="billList" resultMap="billMap" parameterType="Bill">
+        SELECT b.*,p.proName AS providerName from  smbms_bill b LEFT JOIN smbms_provider p ON b.providerId=p.id
+    </select>
+    <!--通过条件查询-->
+    <select id="getBillList" resultMap="billMap">
+        SELECT * FROM smbms_bill b LEFT JOIN smbms_provider p ON b.providerId=p.id
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="providerId !=null">
+               AND billCode=#{providerId}
+            </if>
+            <if test="productName !=null and productName.length() !=0">
+             AND   productName LIKE  concat('%',#{productName},'%')
+            </if>
+            <if test="isPayment !=null">
+              AND  isPayment=#{isPayment}
+            </if>
+        </trim>
+    </select>
+
+
+
+
+    <delete id="delete">
+        DELETE  FROM smbms_bill WHERE id=#{id}
+    </delete>
+    <!--添加订单-->
+    <insert id="insert" parameterType="Bill">
+        INSERT INTO smbms_bill (
+        <trim suffixOverrides=",">
+            <if test="billCode !=null and billCode.length() !=0">
+                billCode,
+            </if>
+            <if test="productName !=null and billCode.length() !=0">
+                productName,
+            </if>
+            <if test="productDesc !=null">
+                productDesc,
+            </if>
+            <if test="productUnit !=null">
+                productUnit,
+            </if>
+            <if test="productCount !=null">
+                productCount,
+            </if>
+            <if test="totalPrice !=null">
+                totalPrice,
+            </if>
+            <if test="isPayment !=null">
+                isPayment,
+            </if>
+            <if test="providerId !=null">
+                providerId,
+            </if>
+            <if test="createdBy !=null">
+                createdBy,
+            </if>
+            <if test="creationDate !=null">
+                creationDate,
+            </if>
+            <if test="modifyBy !=null">
+                modifyBy,
+            </if>
+            <if test="modifyDate !=null">
+                modifyDate,
+            </if>
+        </trim>
+        )
+        VALUES (
+        <trim suffixOverrides=",">
+            <if test="billCode !=null and billCode.length() !=0">
+              #{billCode},
+            </if>
+            <if test="productName !=null and billCode.length() !=0">
+                #{productName},
+            </if>
+            <if test="productDesc !=null">
+              #{productDesc},
+            </if>
+            <if test="productUnit !=null">
+               #{productUnit},
+            </if>
+            <if test="productCount !=null">
+               #{productCount},
+            </if>
+            <if test="totalPrice !=null">
+                #{totalPrice},
+            </if>
+            <if test="isPayment !=null">
+                #{isPayment},
+            </if>
+            <if test="providerId !=null">
+              #{providerId},
+            </if>
+            <if test="createdBy !=null">
+               #{createdBy},
+            </if>
+            <if test="creationDate !=null">
+                #{creationDate},
+            </if>
+            <if test="modifyBy !=null">
+               #{modifyBy},
+            </if>
+            <if test="modifyDate !=null">
+               #{modifyDate},
+            </if>
+        </trim>
+        )
+    </insert>
+    <update id="update" parameterType="Bill">
+        UPDATE smbms_bill
+        <set>
+            <if test="billCode !=null and billCode.length() !=0">
+                billCode=#{billCode},
+            </if>
+            <if test="productName !=null and billCode.length() !=0">
+                productName=#{productName},
+            </if>
+            <if test="productDesc !=null">
+                productDesc=#{productDesc},
+            </if>
+            <if test="productUnit !=null">
+                productUnit=#{productUnit},
+            </if>
+            <if test="productCount !=null">
+                productCount=#{productCount},
+            </if>
+            <if test="totalPrice !=null">
+                totalPrice=#{totalPrice},
+            </if>
+            <if test="isPayment !=null">
+                isPayment=#{isPayment},
+            </if>
+            <if test="providerId !=null">
+                providerId=#{providerId},
+            </if>
+            <if test="createdBy !=null">
+                createdBy=#{createdBy},
+            </if>
+            <if test="creationDate !=null">
+                creationDate=#{creationDate},
+            </if>
+            <if test="modifyBy !=null">
+                modifyBy=#{modifyBy},
+            </if>
+            <if test="modifyDate !=null">
+                modifyDate=#{modifyDate},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+    <select id="getBill" resultType="Bill">
+        select * from smbms_bill where id=#{id} and billCode=#{billCode}
+    </select>
+</mapper>
